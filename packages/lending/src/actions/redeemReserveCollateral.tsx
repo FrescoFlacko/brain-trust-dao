@@ -32,7 +32,7 @@ export const redeemReserveCollateral = async (
   reserveAddress: PublicKey,
 ) => {
   notify({
-    message: 'Withdrawing funds...',
+    message: 'Redeeming collateral...',
     description: 'Please review transactions to approve.',
     type: 'warn',
   });
@@ -105,7 +105,7 @@ export const redeemReserveCollateral = async (
     );
 
     notify({
-      message: 'Funds deposited.',
+      message: 'Collateral redeemed.',
       type: 'success',
       description: `Transaction - ${txid}`,
     });
