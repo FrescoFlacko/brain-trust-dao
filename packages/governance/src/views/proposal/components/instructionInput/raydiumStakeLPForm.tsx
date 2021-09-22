@@ -9,7 +9,10 @@ import { formDefaults } from '../../../../tools/forms';
 import { contexts } from '@oyster/common';
 
 import { depositInstruction } from '../../../../tools/raydium/raydium';
-import { getRAYGovernanceAta, getRaySrmLpUserAccount } from './yieldFarming';
+import {
+  getRAYGovernanceAta,
+  getRaySrmLpFarmUserAccount,
+} from './yieldFarming';
 
 const { useAccount: useTokenAccount } = contexts.Accounts;
 const { useMint } = contexts.Accounts;
@@ -48,14 +51,15 @@ export const RaydiumStakeLPForm = ({
       lpAmount = parseInt(lpTokenAmount.value.amount);
     }
 
-    const lpUserAccount = getRaySrmLpUserAccount(governancePk);
+    const lpUserAccount = getRaySrmLpFarmUserAccount(governancePk);
 
     // stake/harvest RAY-SRM LP
-    let raydiumIx = depositInstruction(
+    const raydiumIx = depositInstruction(
       new PublicKey('EhhTKczWMGQt46ynNeRX1WfeagwwJd7ufHvCDjRxjo5Q'),
       // staking pool
       new PublicKey('5DFbcYNLLy5SJiBpCCDzNSs7cWCsUbYnCkLXzcPQiKnR'),
       new PublicKey('DdFXxCbn5vpxPRaGmurmefCTTSUa5XZ9Kh6Noc4bvrU9'),
+
       // user
       lpUserAccount, // created user info account
       governancePk, // governance PDA
@@ -68,25 +72,6 @@ export const RaydiumStakeLPForm = ({
 
       lpAmount, // amount
     );
-
-    // stake/harvest RAY
-    // raydiumIx = depositInstruction(
-    //   new PublicKey('EhhTKczWMGQt46ynNeRX1WfeagwwJd7ufHvCDjRxjo5Q'),
-    //   // staking pool
-    //   new PublicKey('4EwbZo8BZXP5313z5A2H11MRBP15M5n6YxfmkjXESKAW'),
-    //   new PublicKey('4qD717qKoj3Sm8YfHMSR7tSKjWn5An817nArA6nGdcUR'),
-    //   // user
-    //   new PublicKey('HPDnbMNypc2BPMMzm8PKNRtPm1xgkr8YfgdUePL8oNrb'), // created user info account
-    //   new PublicKey('BB457CW2sN2BpEXzCCi3teaCnDT3hGPZDoCCutHb6BsQ'), // governance PDA
-
-    //   new PublicKey('8bVecpkd9gbK8VtYKHxjjL1uXnSevgdH8BAnuKjScacf'), // governance RAY  account
-    //   new PublicKey('8tnpAECxAT9nHBqR1Ba494Ar5dQMPGhL31MmPJz1zZvY'),
-
-    //   new PublicKey('8bVecpkd9gbK8VtYKHxjjL1uXnSevgdH8BAnuKjScacf'), // governance RAY account
-    //   new PublicKey('BihEG2r7hYax6EherbRmuLLrySBuSXx4PYGd9gAsktKY'),
-
-    //   0, // amount
-    // );
 
     onCreateInstruction(raydiumIx);
   };
